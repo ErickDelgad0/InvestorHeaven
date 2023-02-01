@@ -1,0 +1,138 @@
+/*!
+ * Start Bootstrap - SB Admin 2 v4.1.3 (https://startbootstrap.com/theme/sb-admin-2)
+ * Copyright 2013-2021 Start Bootstrap
+ * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-sb-admin-2/blob/master/LICENSE)
+ */
+
+/*!
+ * Bootstrap v4.6.0 (https://getbootstrap.com/)
+ * Copyright 2011-2021 The Bootstrap Authors
+ * Copyright 2011-2021 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ */
+ @import url(https://fonts.googleapis.com/css?family=Fjalla+One);
+
+ :root {
+    --blue: #4e73df;
+    --indigo: #6610f2;
+    --purple: #6f42c1;
+    --pink: #e83e8c;
+    --orange: #fd7e14;
+    --teal: #20c9a6;
+    --cyan: #36b9cc;
+    --white: #fff;
+    --gray: #858796;
+    --gray-dark: #5a5c69;
+    --primary: #4e73df;
+    --secondary: #858796;
+    --success: #1cc88a;
+    --info: #36b9cc;
+    --warning: #f6c23e;
+    --danger: #e74a3b;
+    --light: #f8f9fc;
+    --dark: #5a5c69;
+    --red: #e55643;
+    --green: #2b9f5e;
+    --yellow: #f1c83c;
+    --shadow: #533d4a;
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  
+  html {
+    font-family: sans-serif;
+    line-height: 1.15;
+    height: 100%;
+  }
+  
+  .body {
+    margin: 0;
+    font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #858796;
+    text-align: left;
+    background-color: #fff;
+  }
+
+  .Header {
+    padding: .15%;
+    text-align: center;
+    background: var(--white);
+    color: var(--white);
+    font-size: 30px;
+  }
+
+  .logo {
+    text-align: left;
+    max-width: 25%;
+    max-height: 100%;
+    margin: auto;
+    display: block;
+  }
+
+body{
+  font-family: 'Fjalla One', sans-serif;
+  background: linear-gradient(to bottom, #405166 0%,#656f6f 100%);
+}
+
+.hero{
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  display: block;
+  position: absolute;
+  max-width: 225px;
+}
+
+.button{
+  font-size: 24px;
+  border: none;
+  float: left;
+  position: relative;
+  bottom: -65px;
+  left: 50%;
+  transform: translateX(-50%) rotate(10deg);
+  color: var(--orange);
+  background-color: transparent; 
+  text-transform: uppercase;
+  text-shadow: var(--shadow) 1px 1px, var(--shadow) 2px 2px, var(--shadow) 3px 3px, var(--shadow) 4px 4px;
+  opacity: 100;
+  cursor: pointer;
+}
+
+span {
+  transform: skew(-10deg);
+  display: block;
+  float: left;
+  text-shadow: var(--shadow) 1px 1px, var(--shadow) 2px 2px, var(--shadow) 3px 3px, var(--shadow) 4px 4px
+}
+
+h1{
+  color: var(--orange);
+  text-transform: uppercase;
+  font-size: 42px;
+  margin: 0;
+  line-height: 47px;
+  letter-spacing: 2px;
+}
+
+.title{
+  transform: translateX(-50%) rotate(10deg);
+  display: block;
+  float: left;
+  left: 50%;
+  position: relative;
+}
