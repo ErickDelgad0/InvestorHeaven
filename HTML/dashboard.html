@@ -10,23 +10,46 @@
     <title>Investor Heaven - Dashboard</title>
     
     <!-- Custom styles for this template-->
-    <link href="../CSS/dashboard.css" rel="stylesheet" >
+    <link href="../CSS/dashboard.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../Javascript/data.js" defer></script>
 </head>
+
 
 <body>
     <div class="header">
        <div class="search">
-        <form action="https://www.google.com/search" method="get" class="search-bar">
-            <input type="text" placeholder="Search for a Stock" name="q">
-            <button type="submit"> <img src="../img/search.png" alt=""> </button>
-        </form>
+        <label for="stock-symbol">Enter stock symbol:</label>
+        <input type="text" id="stock-symbol" name="stock-symbol">
+        <button onclick="getStockData(document.getElementById('stock-symbol').value)">
+            <img src="../img/search.png" alt="Get Data">
+        </button>
+       </div>
+
+       <div class="logo">
+            <img src="../img/logo.png" alt="Investor Heaven">
        </div>
     </div>
 
-    <div class="sidebar">
-        <div class="logo">
-            <img src="/Users/cheesestick/Desktop/InvestorHeaven/img/logo.png" alt="Investor Heaven">
+
+    <div class="main">
+        <div class="timeframe">
+            <input type="radio" id="timeframe-all" name="timeframe" value="max" checked>
+            <label for="timeframe-all">All</label>
+
+            <input type="radio" id="timeframe-three-months" name="timeframe" value="three-months">
+            <label for="timeframe-three-months">Past 3 Months</label>
+
+            <input type="radio" id="timeframe-one-week" name="timeframe" value="one-week">
+            <label for="timeframe-one-week">Past Week</label>
+           </div>
+        <div>
+            <canvas id="chart"></canvas>
         </div>
+    </div>
+
+    <div class="sidebar">
+        sidebar
     </div>
 
     <div class="footer">
@@ -35,3 +58,7 @@
 </body>
 
 </html>
+
+
+
+
