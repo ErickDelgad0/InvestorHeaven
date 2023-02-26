@@ -79,23 +79,37 @@ function drawChart(chartData, symbol) {
             }]
         },
         options: {
+            legend: {
+                display: false
+            },
+            labels: {
+                family: "'Fjalla One', sans-serif"
+            },
             title: {
                 display: true,
-                text: `${symbol} Stock Price`
-            },
-            legend: {
-                position: 'bottom'
+                text: '${symbol} Stock Price',
+                color: "black"
             },
             scales: {
                 y: {
                     ticks: {
                         beginAtZero: false,
                         color: "black"
+                    },
+                    title: {
+                        display: true,
+                        text: 'Closing Prices',
+                        color: "black"
                     }
                 },
                 x: {
                     ticks: {
                         beginAtZero: false,
+                        color: "black"
+                    },
+                    title: {
+                        display: true,
+                        text: 'Dates',
                         color: "black"
                     }
                 }
