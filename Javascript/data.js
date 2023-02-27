@@ -1,5 +1,3 @@
-// 8302fc6d03b2477ba2794a6944b03e01
-
 // Global Variables
 let chart;
 let stockDataAll;
@@ -79,26 +77,20 @@ function drawChart(chartData, symbol) {
             }]
         },
         options: {
-            legend: {
-                display: false
-            },
-            labels: {
-                family: "'Fjalla One', sans-serif"
-            },
-            title: {
-                display: true,
-                text: '${symbol} Stock Price',
-                color: "black"
+            plugins: {
+                legend: {
+                    display: false,
+                },
+                title: {
+                    display: true,
+                    text: "Curr Stock",
+                    color: 'black'
+                }
             },
             scales: {
                 y: {
                     ticks: {
                         beginAtZero: false,
-                        color: "black"
-                    },
-                    title: {
-                        display: true,
-                        text: 'Closing Prices',
                         color: "black"
                     }
                 },
@@ -109,7 +101,6 @@ function drawChart(chartData, symbol) {
                     },
                     title: {
                         display: true,
-                        text: 'Dates',
                         color: "black"
                     }
                 }
@@ -139,9 +130,3 @@ function updateChart(chartData) {
     }
     drawChart(newChartData);
   }
-
-const form = document.getElementById("stock-form");
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
-  getStockData();
-});
