@@ -44,7 +44,7 @@
     height: 100%;
     width: 100%;
     font-family: 'Fjalla One', sans-serif;
-    background-color: #405166;
+    background-color: #DFCFBE;
   }
 
   body {
@@ -132,7 +132,7 @@
     outline: none;
     padding: 24px 20px;
     font-size: 20px;
-    color: #dfddff;
+    color: black;
   }
   
   ::placeholder{

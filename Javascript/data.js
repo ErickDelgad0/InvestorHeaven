@@ -83,7 +83,7 @@ function drawChart(chartData, symbol) {
                 },
                 title: {
                     display: true,
-                    text: "Curr Stock",
+                    text: symbol,
                     color: 'black'
                 }
             },
