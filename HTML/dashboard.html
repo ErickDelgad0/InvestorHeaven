@@ -20,10 +20,10 @@
     <div class="header">
        <div class="search">
         <label for="stock-symbol">Enter stock symbol:</label>
-        <input type="text" id="stock-symbol" name="stock-symbol" size=10>
-        <button onclick="getStockData(document.getElementById('stock-symbol').value)">
-            <img src="../img/search.png" alt="Get Data">
-        </button>
+        <form onclick="getStockData(document.getElementById('stock-symbol').value)">
+            <input type="text" id="stock-symbol" name="stock-symbol" size=10>
+            <input type="submit" style="display: none">
+        </form>
        </div>
 
        <div class="logo">
@@ -33,17 +33,21 @@
 
     <div class="main">
         <div class="timeframe">
-            <input type="radio" id="timeframe-all" name="timeframe" value="max" checked>
-            <label for="timeframe-all">All</label>
+            <form id="onchange">
+                <input type="radio" id="timeframe-all" name="timeframe" value="max" checked>
+                <label for="timeframe-all">All</label>
 
-            <input type="radio" id="timeframe-three-months" name="timeframe" value="three-months">
-            <label for="timeframe-three-months">Past 3 Months</label>
+                <input type="radio" id="timeframe-three-months" name="timeframe" value="three-months">
+                <label for="timeframe-three-months">Past 3 Months</label>
 
-            <input type="radio" id="timeframe-one-week" name="timeframe" value="one-week">
-            <label for="timeframe-one-week">Past Week</label>
+                <input type="radio" id="timeframe-one-week" name="timeframe" value="one-week">
+                <label for="timeframe-one-week">Past Week</label>
+            </form>
            </div>
         <div>
             <canvas id="chart"></canvas>
+            <canvas id="chartPastWeek" style="display: none"></canvas>
+            <canvas id="chartPast3" style="display: none"></canvas>
         </div>
     </div>
 
@@ -55,6 +59,33 @@
         footer
     </div>
 </body>
+<script>
+    document.getElementById('onchange').addEventListener('change', function(){
+        let weekChart = document.getElementById('chartPastWeek')
+        let threeMonth = document.getElementById('chartPastWeek')
+        let allChart = document.getElementById('chart')
+   
+
+        let value = document.querySelector('input[name="timeframe"]:checked').value;
+        console.log(value)
+
+        if (value === "max"){
+            allChart.style.display = 'block'
+            weekChart.style.display = 'none'
+
+        }
+
+        else if (value === "one-week") {
+            allChart.style.display = 'none'
+            weekChart.style.display = 'block'
+
+        }
+        else {
+            allChart.style.display = 'none'
+            weekChart.style.display = 'block'
+        }
+    })
+</script>
 
 </html>
 

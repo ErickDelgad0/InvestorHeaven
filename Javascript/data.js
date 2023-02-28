@@ -22,9 +22,9 @@ function getStockData(symbol) {
             stockDataAll = data["Time Series (Daily)"];
             stockDataThreeMonths = filterStockDataByDate(stockDataAll, TIMEFRAME_THREE_MONTHS);
             stockDataPastWeek = filterStockDataByDate(stockDataAll, TIMEFRAME_ONE_WEEK);
-            const chartData = filterChartData(stockDataAll);
+            const chartData = filterChartData(stockDataAll, symbol);
             console.log(chartData);
-            updateChart(chartData);
+            drawChart(chartData, symbol);
         })
         .catch(error => console.log(error));
 }
@@ -107,26 +107,101 @@ function drawChart(chartData, symbol) {
             }
         }
     });
+
+    const ctx2 = document.getElementById('chartPastWeek').getContext('2d');
+    
+    newChartData = chartData
+    newChartData.labels = newChartData.labels.slice(newChartData.labels.length - 7)
+    newChartData.prices = newChartData.prices.slice(newChartData.prices.length - 7)
+    chart2 = new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: newChartData.labels,
+            datasets: [{
+                label: 'Closing Price',
+                data: newChartData.prices,
+                backgroundColor: 'white',
+                borderColor: 'black',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: false,
+                },
+                title: {
+                    display: true,
+                    text: 'TEST',
+                    color: 'black'
+                }
+            },
+            scales: {
+                y: {
+                    ticks: {
+                        beginAtZero: false,
+                        color: "black"
+                    }
+                },
+                x: {
+                    ticks: {
+                        beginAtZero: false,
+                        color: "black"
+                    },
+                    title: {
+                        display: true,
+                        color: "black"
+                    }
+                }
+            }
+        }
+    });
+    const ctx3 = document.getElementById('chartPast3').getContext('2d');
+    
+    newChartData = chartData
+    newChartData.labels = newChartData.labels.slice(newChartData.labels.length - 7)
+    newChartData.prices = newChartData.prices.slice(newChartData.prices.length - 7)
+    chart2 = new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: newChartData.labels,
+            datasets: [{
+                label: 'Closing Price',
+                data: newChartData.prices,
+                backgroundColor: 'white',
+                borderColor: 'black',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: false,
+                },
+                title: {
+                    display: true,
+                    text: 'TEST',
+                    color: 'black'
+                }
+            },
+            scales: {
+                y: {
+                    ticks: {
+                        beginAtZero: false,
+                        color: "black"
+                    }
+                },
+                x: {
+                    ticks: {
+                        beginAtZero: false,
+                        color: "black"
+                    },
+                    title: {
+                        display: true,
+                        color: "black"
+                    }
+                }
+            }
+        }
+    });
 }
-
-
-function updateChart(chartData) {
-    const timeframe = document.querySelector('input[name="timeframe"]:checked').value;
-    let filteredData = {};
-    switch (timeframe) {
-      case TIMEFRAME_MAX:
-        filteredData = stockDataAll;
-        break;
-      case TIMEFRAME_THREE_MONTHS:
-        filteredData = stockDataThreeMonths;
-        break;
-      case TIMEFRAME_ONE_WEEK:
-        filteredData = stockDataPastWeek;
-        break;
-    }
-    const newChartData = filterChartData(filteredData);
-    if (chart) {
-      chart.destroy();
-    }
-    drawChart(newChartData);
-  }
