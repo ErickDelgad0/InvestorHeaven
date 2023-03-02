@@ -9,22 +9,26 @@
 
     <title>Investor Heaven - Dashboard</title>
     
-    <!-- Custom styles for this template-->
+    <!-- Custom styles for this dashboard-->
     <link href="../CSS/dashboard.css" rel="stylesheet">
+
+    <!-- Accompanied javascript -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../Javascript/data.js" defer></script>
 </head>
 
 <body>
     <div class="header">
+        <!-- Input to research a Stock -->
        <div class="search">
         <label for="stock-symbol">Enter stock symbol:</label>
         <form>
-            <input type="text" id="stock-symbol" name="stock-symbol" size=10>
+            <input type="text" id="stock-symbol" name="stock-symbol" size=10 onkeyup="this.value = this.value.toUpperCase();">
             <input type="submit" style="display: none">
         </form>
        </div>
 
+       <!-- Website Logo -->
        <div class="logo">
             <img src="../img/logo.png" alt="Investor Heaven">
        </div>
@@ -32,6 +36,7 @@
 
     <div class="main">
         <div class="stock-history">
+            <!-- Change the Stock History Timeline -->
             <form id="onchange">
                 <input type="radio" id="timeframe-all" name="timeframe" value="max" checked>
                 <label for="timeframe-all">All</label>
@@ -42,6 +47,7 @@
                 <input type="radio" id="timeframe-one-week" name="timeframe" value="one-week">
                 <label for="timeframe-one-week">Past Week</label>
             </form>
+            <!-- Stock History is Displayed Here -->
             <canvas id="chart"></canvas>
             <canvas id="chartPastWeek" style="display: none"></canvas>
             <canvas id="chartPast3" style="display: none"></canvas>
@@ -94,8 +100,6 @@
             threeMonth.style.display = 'block'
         }
     })
-
-    console.log(document.getElementById('stock-symbol').value)
 </script>
 
 </html>

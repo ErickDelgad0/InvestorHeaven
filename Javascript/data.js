@@ -1,13 +1,19 @@
 // Global Variables
-let chart;
+let chart = null;
 let stockDataAll;
 let stockDataThreeMonths;
 let stockDataPastWeek;
 
+
+// Choose a Random Stock to Display
+// Generate a random rounded number between 1 to 10;
+var theRandomNumber = Math.floor(Math.random() * 7);
+const rng_stocks = ['AMZN', 'GEO', 'NCLH', 'F', 'CANO', 'TSLA', 'DFFN'];
+
 // Wait for the HTML document to load
 // before running. DEFAULT SET TO AMAZON AMZN
 document.addEventListener('DOMContentLoaded', () => {
-    getStockData('AMZN');
+    getStockData(rng_stocks[theRandomNumber]);
 });
 
 function getStockData(symbol) {
@@ -37,6 +43,16 @@ function filterChartData(data, symbol) {
 }
 
 function drawChart(chartData, symbol) {
+    
+    if (chart != null){
+        // destory old charts
+        chart.destroy();
+        chart2.destroy();
+        chart3.destroy();
+    }
+
+    mybool = false;
+
     const ctx = document.getElementById('chart').getContext('2d');
     chart = new Chart(ctx, {
         type: 'line',
