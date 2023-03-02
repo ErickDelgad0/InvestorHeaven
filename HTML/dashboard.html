@@ -15,12 +15,11 @@
     <script src="../Javascript/data.js" defer></script>
 </head>
 
-
 <body>
     <div class="header">
        <div class="search">
         <label for="stock-symbol">Enter stock symbol:</label>
-        <form onclick="getStockData(document.getElementById('stock-symbol').value)">
+        <form>
             <input type="text" id="stock-symbol" name="stock-symbol" size=10>
             <input type="submit" style="display: none">
         </form>
@@ -32,7 +31,7 @@
     </div>
 
     <div class="main">
-        <div class="timeframe">
+        <div class="stock-history">
             <form id="onchange">
                 <input type="radio" id="timeframe-all" name="timeframe" value="max" checked>
                 <label for="timeframe-all">All</label>
@@ -43,8 +42,6 @@
                 <input type="radio" id="timeframe-one-week" name="timeframe" value="one-week">
                 <label for="timeframe-one-week">Past Week</label>
             </form>
-           </div>
-        <div>
             <canvas id="chart"></canvas>
             <canvas id="chartPastWeek" style="display: none"></canvas>
             <canvas id="chartPast3" style="display: none"></canvas>
@@ -56,35 +53,49 @@
     </div>
 
     <div class="footer">
-        footer
+        <div id="market-view"></div>
     </div>
 </body>
+
 <script>
+
+    document.querySelector('form').addEventListener('submit', function(event) {
+    // prevent the default form submission behavior
+    event.preventDefault();
+
+    // get the value of the stock-symbol input field
+    var stockSymbol = document.getElementById('stock-symbol').value;
+
+    // do something with the stockSymbol value, such as pass it to a function
+    getStockData(stockSymbol);
+    });
+
     document.getElementById('onchange').addEventListener('change', function(){
         let weekChart = document.getElementById('chartPastWeek')
-        let threeMonth = document.getElementById('chartPastWeek')
+        let threeMonth = document.getElementById('chartPast3')
         let allChart = document.getElementById('chart')
-   
-
         let value = document.querySelector('input[name="timeframe"]:checked').value;
-        console.log(value)
 
         if (value === "max"){
             allChart.style.display = 'block'
             weekChart.style.display = 'none'
-
+            threeMonth.style.display = 'none'
         }
 
         else if (value === "one-week") {
             allChart.style.display = 'none'
             weekChart.style.display = 'block'
+            threeMonth.style.display = 'none'
 
         }
         else {
             allChart.style.display = 'none'
-            weekChart.style.display = 'block'
+            weekChart.style.display = 'none'
+            threeMonth.style.display = 'block'
         }
     })
+
+    console.log(document.getElementById('stock-symbol').value)
 </script>
 
 </html>

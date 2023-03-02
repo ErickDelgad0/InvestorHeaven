@@ -67,8 +67,7 @@
     position: absolute;
     right: 18px;
     top: 10%;
-    width: 85%;
-    right: 18px;
+    width: 80%;
   }
 
   .sidebar {
@@ -152,4 +151,9 @@
     background: var(--blue);
     cursor: pointer;
     border-radius: 90px;
+  }
+
+  .stock-history form{
+    position: relative;
+    left: 18px;
   }

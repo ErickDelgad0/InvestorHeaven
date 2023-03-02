@@ -4,10 +4,6 @@ let stockDataAll;
 let stockDataThreeMonths;
 let stockDataPastWeek;
 
-const TIMEFRAME_MAX = 'max';
-const TIMEFRAME_THREE_MONTHS = 'three-months';
-const TIMEFRAME_ONE_WEEK = 'one-week';
-
 // Wait for the HTML document to load
 // before running. DEFAULT SET TO AMAZON AMZN
 document.addEventListener('DOMContentLoaded', () => {
@@ -20,33 +16,11 @@ function getStockData(symbol) {
         .then(data => {
             console.log(data);
             stockDataAll = data["Time Series (Daily)"];
-            stockDataThreeMonths = filterStockDataByDate(stockDataAll, TIMEFRAME_THREE_MONTHS);
-            stockDataPastWeek = filterStockDataByDate(stockDataAll, TIMEFRAME_ONE_WEEK);
             const chartData = filterChartData(stockDataAll, symbol);
             console.log(chartData);
             drawChart(chartData, symbol);
         })
         .catch(error => console.log(error));
-}
-
-function filterStockDataByDate(data, timeframe) {
-    let stockData = {};
-    const now = new Date();
-    switch (timeframe) {
-        case TIMEFRAME_THREE_MONTHS:
-            now.setMonth(now.getMonth() - 3);
-            break;
-        case TIMEFRAME_ONE_WEEK:
-            now.setDate(now.getDate() - 7);
-            break;
-    }
-    const oldestDate = now.toISOString().slice(0, 10);
-    for (const date in data) {
-        if (date >= oldestDate) {
-            stockData[date] = data[date];
-        }
-    }
-    return stockData;
 }
 
 function filterChartData(data, symbol) {
@@ -108,18 +82,20 @@ function drawChart(chartData, symbol) {
         }
     });
 
-    const ctx2 = document.getElementById('chartPastWeek').getContext('2d');
+    const ctx3 = document.getElementById('chartPast3').getContext('2d');
     
-    newChartData = chartData
-    newChartData.labels = newChartData.labels.slice(newChartData.labels.length - 7)
-    newChartData.prices = newChartData.prices.slice(newChartData.prices.length - 7)
-    chart2 = new Chart(ctx2, {
+    let newChartData3 = chartData
+    
+    newChartData3.labels = newChartData3.labels.slice(newChartData3.labels.length - 60)
+    
+    newChartData3.prices = newChartData3.prices.slice(newChartData3.prices.length - 60)
+    chart3 = new Chart(ctx3, {
         type: 'line',
         data: {
-            labels: newChartData.labels,
+            labels: newChartData3.labels,
             datasets: [{
                 label: 'Closing Price',
-                data: newChartData.prices,
+                data: newChartData3.prices,
                 backgroundColor: 'white',
                 borderColor: 'black',
                 borderWidth: 1
@@ -132,7 +108,7 @@ function drawChart(chartData, symbol) {
                 },
                 title: {
                     display: true,
-                    text: 'TEST',
+                    text: symbol,
                     color: 'black'
                 }
             },
@@ -156,9 +132,11 @@ function drawChart(chartData, symbol) {
             }
         }
     });
-    const ctx3 = document.getElementById('chartPast3').getContext('2d');
+
+    const ctx2 = document.getElementById('chartPastWeek').getContext('2d');
     
-    newChartData = chartData
+    let newChartData = chartData
+
     newChartData.labels = newChartData.labels.slice(newChartData.labels.length - 7)
     newChartData.prices = newChartData.prices.slice(newChartData.prices.length - 7)
     chart2 = new Chart(ctx2, {
@@ -180,7 +158,7 @@ function drawChart(chartData, symbol) {
                 },
                 title: {
                     display: true,
-                    text: 'TEST',
+                    text: symbol,
                     color: 'black'
                 }
             },
