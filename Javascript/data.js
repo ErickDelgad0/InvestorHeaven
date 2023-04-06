@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
     getStockData(rng_stocks[theRandomNumber]);
 });
 
+
+// Stock Charts
 function getStockData(symbol) {
     fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&apikey=8302fc6d03b2477ba2794a6944b03e01`)
         .then(response => response.json())
@@ -198,4 +200,20 @@ function drawChart(chartData, symbol) {
             }
         }
     });
+}
+
+// This method is how I could include news about any given stock.
+function getNewsData(){
+    var date = new Date();
+    date.setDate(date.getDate() - 7);
+    console.log(date);
+    
+    var url = 'https://newsapi.org/v2/everything?q=${symbol}&from=${date}&sortBy=popularity&apiKey=49d6fb02668f4e178341e719ff2920b2';
+    
+    var req = new Request(url);
+    
+    fetch(req)
+    .then(function(response) {
+        console.log(response.json());
+    })
 }
