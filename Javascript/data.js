@@ -19,7 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Stock Charts
 function getStockData(symbol) {
-    fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&apikey=8302fc6d03b2477ba2794a6944b03e01`)
+
+    // Request to alpha vantage that is used to create visual time series graph
+    const alpha_url_graph = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&apikey=8302fc6d03b2477ba2794a6944b03e01`;
+    fetch(alpha_url_graph)
         .then(response => response.json())
         .then(data => {
             console.log(data);
@@ -29,6 +32,42 @@ function getStockData(symbol) {
             drawChart(chartData, symbol);
         })
         .catch(error => console.log(error));
+
+
+    // Request that looks for critical company information
+    const alpha_url_overview = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=8302fc6d03b2477ba2794a6944b03e01`;
+    fetch(alpha_url_overview)
+        .then(response => response.json())
+        .then(data1 => {
+            console.log(data1);
+            // Extract the data from data1
+            const companyName = data1.Name;
+            const target = data1.AnalystTargetPrice;
+            const peRatio = data1.PERatio;
+            const pbRatio = data1.PriceToBookRatio;
+            const bookval = data1.BookValue;
+            displayCompany(companyName, symbol)
+            displayStockRatios(peRatio, pbRatio, bookval, target);
+        })
+        .catch(error => console.log(error));
+}
+function displayCompany(stockname, symbol){
+    const stockName = document.getElementById("stock-name");
+    const html = `
+      <h2>${stockname} (${symbol})</h2>
+    `;
+    stockName.innerHTML = html;
+}
+
+function displayStockRatios(peRatio, pbRatio, bookval, target) {
+    const stockRatiosDiv = document.getElementById("stock-ratios");
+    const html = `
+      <p>Price to Earning Ratio: ${peRatio}</p>
+      <p>Price to Book Ratio: ${pbRatio}</p>
+      <p>Booking value: ${bookval}</p>
+      <p>Analyst Target Price: ${target}</p>
+    `;
+    stockRatiosDiv.innerHTML = html;
 }
 
 function filterChartData(data, symbol) {
@@ -74,7 +113,7 @@ function drawChart(chartData, symbol) {
                     display: false,
                 },
                 title: {
-                    display: true,
+                    display: false,
                     text: symbol,
                     color: 'black'
                 }
@@ -125,7 +164,7 @@ function drawChart(chartData, symbol) {
                     display: false,
                 },
                 title: {
-                    display: true,
+                    display: false,
                     text: symbol,
                     color: 'black'
                 }
@@ -175,7 +214,7 @@ function drawChart(chartData, symbol) {
                     display: false,
                 },
                 title: {
-                    display: true,
+                    display: false,
                     text: symbol,
                     color: 'black'
                 }
