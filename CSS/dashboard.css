@@ -157,3 +157,16 @@
     position: relative;
     left: 18px;
   }
+
+  #buy-sell-hold{
+    float: right;
+  }
+
+  #buy-sell-hold img{
+    max-width: 70%;
+    height: auto;
+  }
+
+  #stock-ratios, #buy-sell-hold {
+    display: inline-block;
+  }

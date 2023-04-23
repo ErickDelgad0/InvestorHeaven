@@ -4,6 +4,8 @@ let stockDataAll;
 let stockDataThreeMonths;
 let stockDataPastWeek;
 
+const apiKey = "8302fc6d03b2477ba2794a6944b03e01";
+
 
 // Choose a Random Stock to Display
 // Generate a random rounded number between 1 to 10;
@@ -19,38 +21,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Stock Charts
 function getStockData(symbol) {
+    const timeseries = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&apikey=${apiKey}`;
+    const company_overview = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=${apiKey}`;
 
-    // Request to alpha vantage that is used to create visual time series graph
-    const alpha_url_graph = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&apikey=8302fc6d03b2477ba2794a6944b03e01`;
-    fetch(alpha_url_graph)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            stockDataAll = data["Time Series (Daily)"];
-            const chartData = filterChartData(stockDataAll, symbol);
-            console.log(chartData);
-            drawChart(chartData, symbol);
-        })
-        .catch(error => console.log(error));
+    Promise.all([
+        fetch(timeseries).then(response => response.json()),
+        fetch(company_overview).then(response => response.json())
+    ]).then(([graphData, overviewData]) => {
+        const latestDate = Object.keys(graphData["Time Series (Daily)"])[0];
+        const latestPrice = parseFloat(graphData["Time Series (Daily)"][latestDate]["4. close"]);
 
+        const chartData = filterChartData(graphData["Time Series (Daily)"], symbol);
+        drawChart(chartData, symbol);
 
-    // Request that looks for critical company information
-    const alpha_url_overview = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=8302fc6d03b2477ba2794a6944b03e01`;
-    fetch(alpha_url_overview)
-        .then(response => response.json())
-        .then(data1 => {
-            console.log(data1);
-            // Extract the data from data1
-            const companyName = data1.Name;
-            const target = data1.AnalystTargetPrice;
-            const peRatio = data1.PERatio;
-            const pbRatio = data1.PriceToBookRatio;
-            const bookval = data1.BookValue;
-            displayCompany(companyName, symbol)
-            displayStockRatios(peRatio, pbRatio, bookval, target);
-        })
-        .catch(error => console.log(error));
+        const companyName = overviewData.Name;
+        const target = overviewData.AnalystTargetPrice;
+        const peRatio = overviewData.PERatio === "None" ? overviewData.PEGRatio : overviewData.PERatio;
+        const pbRatio = overviewData.PriceToBookRatio;
+        const bookval = overviewData.BookValue;
+        const EVToEBITDA = overviewData.EVToEBITDA;
+
+        displayCompany(companyName, symbol);
+        displayStockRatios(peRatio, pbRatio, EVToEBITDA, bookval, target);
+
+        BuySell(target, latestPrice)
+    }).catch(error => console.log(error));
 }
+
 function displayCompany(stockname, symbol){
     const stockName = document.getElementById("stock-name");
     const html = `
@@ -59,11 +56,13 @@ function displayCompany(stockname, symbol){
     stockName.innerHTML = html;
 }
 
-function displayStockRatios(peRatio, pbRatio, bookval, target) {
+function displayStockRatios(peRatio, pbRatio, EVToEBITDA, bookval, target) {
     const stockRatiosDiv = document.getElementById("stock-ratios");
     const html = `
-      <p>Price to Earning Ratio: ${peRatio}</p>
-      <p>Price to Book Ratio: ${pbRatio}</p>
+      <p>P/E Ratio: ${peRatio}</p>
+      <p>P/B Ratio: ${pbRatio}</p>
+
+      <p>EV/ EBITDA: ${EVToEBITDA}</p>
       <p>Booking value: ${bookval}</p>
       <p>Analyst Target Price: ${target}</p>
     `;
@@ -241,18 +240,98 @@ function drawChart(chartData, symbol) {
     });
 }
 
-// This method is how I could include news about any given stock.
-function getNewsData(){
-    var date = new Date();
-    date.setDate(date.getDate() - 7);
-    console.log(date);
-    
-    var url = 'https://newsapi.org/v2/everything?q=${symbol}&from=${date}&sortBy=popularity&apiKey=49d6fb02668f4e178341e719ff2920b2';
-    
-    var req = new Request(url);
-    
-    fetch(req)
-    .then(function(response) {
-        console.log(response.json());
-    })
+function calculatePreferredStockValue(dividendRate) {
+    const dividendRateDecimal = dividendRate / 100;
+
+    // The preffered stock value will be evaluted by an 8%
+    // return on investment
+    const preferredStockValue = dividendRateDecimal / 8;
+    return preferredStockValue;
 }
+
+function BuySell(targetPrice, closingPrice){
+    const percentageDifference = Math.abs(targetPrice - closingPrice) / closingPrice * 100;
+  
+    if (targetPrice > closingPrice) {
+        if (percentageDifference <= 5) {
+            displayImage("../img/hold.png", "hold");
+        } else {
+            displayImage("../img/buy.png", "buy");
+        }
+    } else {
+        if (percentageDifference <= 5) {
+            displayImage("../img/hold.png", "hold");
+        } else {
+            displayImage("../img/sell.png", "sell");
+        }
+    }
+}
+
+function displayImage(imageFileName, Other) {
+    const dashboard = document.getElementById("buy-sell-hold");
+    dashboard.innerHTML = `<img src="${imageFileName}" alt=${Other}>`;
+    
+}
+
+
+// function BuySell(symbol, currentPrice, pbRatio, peRatio) {
+//     const income_url = `https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=${symbol}&apikey=${apiKey}`;
+//     const BalanceSheet_url = `https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol=${symbol}&apikey=${apiKey}`;
+
+//     Promise.all([
+//         fetch(income_url).then(response => response.json()),
+//         fetch(BalanceSheet_url).then(response => response.json())
+//     ]).then(([income_data, balance_data]) => {
+//         // Extract the relevant fields from the API response
+//         const annualDividend = parseFloat(income_data.annualDividend);
+//         const outstandingShares = parseFloat(income_data.outstandingShares);
+  
+//         // Calculate the annual dividend payment
+//         const annualDividendPayment = annualDividend * outstandingShares;
+//         const dividendRate = annualDividendPayment / (currentPrice * outstandingShares);
+
+
+//         if (!balance_data.balancesheet) {
+//             console.error(`No balance sheet data found for symbol: ${symbol}`);
+//             return false;
+//         }
+
+//         const balanceSheet = balance_data.balancesheet[0];
+//         const currentAssets = parseFloat(balanceSheet.currentassets);
+//         const totalLiabilities = parseFloat(balanceSheet.totalliabilities);
+
+//         const NetValue = currentAssets - totalLiabilities - calculatePreferredStockValue(dividendRate);
+
+//         // price and earning based on ratios
+//         const price = pbRatio * NetValue;
+//         const earnings = NetValue / peRatio;
+
+//         if (price < NetValue && earnings < NetValue) {
+//             console.log("true");
+//             return true;
+//         } else {
+//             console.log("false");
+//             return false;
+//         }
+
+//     }).catch(error => console.log(error));
+// }
+
+  
+
+// This method is how I could include news about any given stock.
+
+// function getNewsData(){
+//     var date = new Date();
+//     date.setDate(date.getDate() - 7);
+//     console.log(date);
+    
+//     var url = 'https://newsapi.org/v2/everything?q=${symbol}&from=${date}&sortBy=popularity&apiKey=49d6fb02668f4e178341e719ff2920b2';
+    
+//     var req = new Request(url);
+    
+//     fetch(req)
+//     .then(function(response) {
+//         console.log(response.json());
+//     })
+// } python Simplehttpserver
