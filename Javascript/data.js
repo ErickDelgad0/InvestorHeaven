@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// Stock Charts
+// Pull data from a stock
 function getStockData(symbol) {
     const timeseries = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&apikey=${apiKey}`;
     const company_overview = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=${apiKey}`;
@@ -48,6 +48,7 @@ function getStockData(symbol) {
     }).catch(error => console.log(error));
 }
 
+// Better styled title for the chart
 function displayCompany(stockname, symbol){
     const stockName = document.getElementById("stock-name");
     const html = `
@@ -56,6 +57,7 @@ function displayCompany(stockname, symbol){
     stockName.innerHTML = html;
 }
 
+// displays stock ratios under graph 
 function displayStockRatios(peRatio, pbRatio, EVToEBITDA, bookval, target) {
     const stockRatiosDiv = document.getElementById("stock-ratios");
     const html = `
@@ -69,6 +71,7 @@ function displayStockRatios(peRatio, pbRatio, EVToEBITDA, bookval, target) {
     stockRatiosDiv.innerHTML = html;
 }
 
+// Takes in data from get stock data and formats
 function filterChartData(data, symbol) {
     // Extract the data points from the data object and convert them to arrays
     let dates = Object.keys(data).reverse();
@@ -82,6 +85,7 @@ function filterChartData(data, symbol) {
     };
 }
 
+// creates 3 different charts with differing time series
 function drawChart(chartData, symbol) {
     
     if (chart != null){
@@ -240,6 +244,7 @@ function drawChart(chartData, symbol) {
     });
 }
 
+
 function calculatePreferredStockValue(dividendRate) {
     const dividendRateDecimal = dividendRate / 100;
 
@@ -249,6 +254,7 @@ function calculatePreferredStockValue(dividendRate) {
     return preferredStockValue;
 }
 
+// Buy or sell algo that displays an image based on anaylst target price.
 function BuySell(targetPrice, closingPrice){
     const percentageDifference = Math.abs(targetPrice - closingPrice) / closingPrice * 100;
   
@@ -267,12 +273,41 @@ function BuySell(targetPrice, closingPrice){
     }
 }
 
+
 function displayImage(imageFileName, Other) {
     const dashboard = document.getElementById("buy-sell-hold");
     dashboard.innerHTML = `<img src="${imageFileName}" alt=${Other}>`;
     
 }
 
+
+// WARNING
+//
+//
+// YOU ARE ENTERING THE JUNK YARD
+//
+//
+
+// Below is code that could potentially display a stocks related news
+// Could potentially be an idication of good/ bad news 
+
+// function getNewsData(){
+//     var date = new Date();
+//     date.setDate(date.getDate() - 7);
+//     console.log(date);
+    
+//     var url = 'https://newsapi.org/v2/everything?q=${symbol}&from=${date}&sortBy=popularity&apiKey=49d6fb02668f4e178341e719ff2920b2';
+    
+//     var req = new Request(url);
+    
+//     fetch(req)
+//     .then(function(response) {
+//         console.log(response.json());
+//     })
+// }
+
+
+// Below is the NET NET trading strategy that fell short
 
 // function BuySell(symbol, currentPrice, pbRatio, peRatio) {
 //     const income_url = `https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=${symbol}&apikey=${apiKey}`;
@@ -282,11 +317,9 @@ function displayImage(imageFileName, Other) {
 //         fetch(income_url).then(response => response.json()),
 //         fetch(BalanceSheet_url).then(response => response.json())
 //     ]).then(([income_data, balance_data]) => {
-//         // Extract the relevant fields from the API response
 //         const annualDividend = parseFloat(income_data.annualDividend);
 //         const outstandingShares = parseFloat(income_data.outstandingShares);
   
-//         // Calculate the annual dividend payment
 //         const annualDividendPayment = annualDividend * outstandingShares;
 //         const dividendRate = annualDividendPayment / (currentPrice * outstandingShares);
 
@@ -302,7 +335,6 @@ function displayImage(imageFileName, Other) {
 
 //         const NetValue = currentAssets - totalLiabilities - calculatePreferredStockValue(dividendRate);
 
-//         // price and earning based on ratios
 //         const price = pbRatio * NetValue;
 //         const earnings = NetValue / peRatio;
 
@@ -316,22 +348,3 @@ function displayImage(imageFileName, Other) {
 
 //     }).catch(error => console.log(error));
 // }
-
-  
-
-// This method is how I could include news about any given stock.
-
-// function getNewsData(){
-//     var date = new Date();
-//     date.setDate(date.getDate() - 7);
-//     console.log(date);
-    
-//     var url = 'https://newsapi.org/v2/everything?q=${symbol}&from=${date}&sortBy=popularity&apiKey=49d6fb02668f4e178341e719ff2920b2';
-    
-//     var req = new Request(url);
-    
-//     fetch(req)
-//     .then(function(response) {
-//         console.log(response.json());
-//     })
-// } python Simplehttpserver
